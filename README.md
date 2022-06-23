@@ -7,5 +7,5 @@ Lastly, we provide a package which can be used to obtain joint prediction region
 
 See the test file to see how the packages can be used. 
 
-Tensorflow version 2.8.0
+Tensorflow version 2.8.0\\
 PyTorch version 1.11.0
