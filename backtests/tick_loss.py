@@ -1,6 +1,10 @@
 import numpy as np
 
 def quantile_risk(forecast, labels, quantiles):
+    """
+    The quantile risk, aka tick loss, is the same as the objective function
+    of the neural nets. This function is written in numpy only.
+    """
     ### prepare quantiles
     quantile_length = len(quantiles)
     quantile_tiled = np.repeat(quantiles.T, [len(labels)])
@@ -10,7 +14,7 @@ def quantile_risk(forecast, labels, quantiles):
     output_y_tiled = np.tile(labels, [quantile_length])
 
     ### prepare predicted values
-    predicted_y_tiled = np.reshape(forecast.T, [-1])  # output_y_tiled.shape
+    predicted_y_tiled = np.reshape(forecast.T, [-1])
 
     ### objective function
     diff_y = output_y_tiled - predicted_y_tiled

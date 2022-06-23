@@ -66,6 +66,9 @@ class LocalDecoder(nn.Module):
 
 
 class Penalizer(nn.Module):
+    """
+    Final layer of the decoder. Ensures the output to be noncrossing by using l1_p_layer components
+    """
     def __init__(self,
                 quantile_size,
                 context_size,
@@ -79,7 +82,7 @@ class Penalizer(nn.Module):
         self.context_size = context_size
 
         self.l1_p_layers = nn.ModuleList()
-        for h in range(horizon_size):
+        for h in range(horizon_size): # For every horizon we set a different layer
             l1_p_layer = l1_p(context_size*(horizon_size+1),
                              quantile_size)
 

@@ -1,6 +1,11 @@
 import numpy as np
 
 def calculate_jpr_length(forecast, labels):
+    """
+    Calculate the average length of the joint prediction regions.
+    The length is the distance between the 0.99 unconditional quantile and the conditional quantile of interest.
+    """
+
     lengths = []
 
     for idx in range(len(labels[0])):
@@ -12,6 +17,11 @@ def calculate_jpr_length(forecast, labels):
     return np.mean(lengths)
 
 def calculate_length(forecast, labels):
+    """
+    Calculate the average length of the prediction region.
+    The length is the distance between the 0.99 unconditional quantile and the conditional quantile of interest.
+    """
+
     uncond_quantile = np.quantile(labels, 0.99)
     lengths = []
 

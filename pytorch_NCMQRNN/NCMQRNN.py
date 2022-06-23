@@ -7,7 +7,7 @@ from pytorch_NCMQRNN.l1_penalization_layer import non_cross_transformation
 
 class NCMQRNN(object):
     """
-    This class holds the encoder and the global decoder and local decoder.
+    This class holds the encoder and the decoder.
     """
     def __init__(self, 
                 horizon_size:int, 
@@ -102,22 +102,17 @@ class NCMQRNN(object):
             outputs = self.encoder(input_target_covariate_tensor) #[seq_len,1,hidden_size]
             hidden = torch.unsqueeze(outputs[-1],dim=0) #[1,1,hidden_size]
 
-            #next_covariate_tensor = torch.unsqueeze(next_covariate_tensor, dim=0) # [1,1, covariate_size * horizon_size]
 
             print(f"hidden shape: {hidden.shape}")
             gdecoder_input = hidden #[1,1, hidden + covariate_size* horizon_size]
             gdecoder_output = self.gdecoder(gdecoder_input) #[1,1,(horizon_size+1)*context_size]
-
-
-            local_decoder_input = gdecoder_output #[1, 1,(horizon_size+1)*context_size + covariate_size * horizon_size]
-
             penalizer_output, loss = self.penalizer(gdecoder_output)
 
 
             penalizer_output = penalizer_output.view(self.horizon_size,self.quantile_size)
 
-            delta_coef_matrix = None
-            delta_0_matrix = None
+            #delta_coef_matrix = None
+            #delta_0_matrix = None
             i = 1
             for parameter in self.penalizer.parameters():
                 if i % 2 != 0:

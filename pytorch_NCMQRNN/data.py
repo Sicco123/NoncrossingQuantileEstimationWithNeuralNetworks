@@ -23,7 +23,9 @@ def read_df(df, train_size, val_size):
 
 
 class NCMQRNN_dataset(Dataset):
-    
+    """
+    Prepare NCMQRNN dataset
+    """
     def __init__(self,
                 series_df:pd.DataFrame,
                 covariate_df:pd.DataFrame, 
@@ -41,9 +43,6 @@ class NCMQRNN_dataset(Dataset):
     def __getitem__(self,idx):
         cur_series = np.array(self.series_df.iloc[: -self.horizon_size, idx])
         cur_covariate = np.array(self.covariate_df.iloc[:-self.horizon_size, :]) # covariate used in generating hidden states
-
-        covariate_size = self.covariate_df.shape[1]
-        #next_covariate = np.array(self.covariate_df.iloc[1:-self.horizon_size+1,:]) # covariate used in the MLP decoders
 
         real_vals_list = []
         for i in range(1, self.horizon_size+1):

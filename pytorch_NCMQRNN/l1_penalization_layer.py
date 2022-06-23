@@ -2,7 +2,10 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-class l1_p(nn.Module): #This class builds on the layer class of keras.
+class l1_p(nn.Module): #This class builds on the layer class of pytorch
+    """
+    l1 penalization module
+    """
     def __init__(self, size_in, number_of_quantiles,**kwargs):
         super(l1_p, self).__init__()
         self.size_in = size_in
@@ -21,9 +24,11 @@ class l1_p(nn.Module): #This class builds on the layer class of keras.
 
 
     def forward(self, inputs, **kwargs):
-
+        """
+        Forward pass through layer.
+        """
         ### Build beta matrix
-        delta_mat = torch.cat([self.delta_0_matrix, self.delta_coef_matrix], dim=0) # 41 x 20
+        delta_mat = torch.cat([self.delta_0_matrix, self.delta_coef_matrix], dim=0)
         beta_mat = torch.t(torch.cumsum(torch.t(delta_mat),dim=0))
 
 
@@ -46,16 +51,17 @@ class l1_p(nn.Module): #This class builds on the layer class of keras.
                                                                                    dim=1)
 
         delta_constraint = delta_0_vec_clipped - delta_minus_vec_sum
-        delta_clipped = torch.clip(delta_constraint, min=10 ** (-20), max=np.Inf)
         delta_l1_penalty = torch.mean(torch.abs(
-           delta_0_vec - delta_0_vec_clipped))  # tf.reduce_mean(tf.abs(self.delta_0_vec - self.delta_0_vec_clipped))
-
-        #l2_penalty = torch.mean(self.delta_coef_matrix**2) # delta penalty
-        #self.add_loss(self.penalty_2 * l2_penalty)
+           delta_0_vec - delta_0_vec_clipped))
 
         return  predicted_y, delta_l1_penalty #predicted_y_modified
 
 def non_cross_transformation(predicted_y, delta_coef_matrix, delta_0_matrix):
+    """
+    Function which ensure quantiles to be noncrossing in case of no convergence.
+    This output can be far from optimal.
+    """
+
     ### Build beta matrix
     delta_mat = torch.cat([delta_0_matrix, delta_coef_matrix], dim=0)
     beta_mat = torch.t(torch.cumsum(torch.t(delta_mat), dim=0))
@@ -74,11 +80,7 @@ def non_cross_transformation(predicted_y, delta_coef_matrix, delta_0_matrix):
     transformed_y = part_1 + torch.cumsum(torch.cat([beta_mat[0:1, 0:1],
                                                  delta_0_vec_clipped], dim=1), dim=1)
 
-    # print(beta_mat[0,:])
-    # print(torch.cumsum(torch.cat([beta_mat[0:1, 0:1],
-    #                                              delta_0_vec_clipped], dim=1), dim=1))
+
     return transformed_y
 
 
-
-# l1 penalization and transformation
