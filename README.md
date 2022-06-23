@@ -4,3 +4,8 @@ We implemented three different models in the Tensorflow framework. This can be f
 We implemented one model in the PyTorch framework. This can be found in the pytorch_NCMQRNN package. 
 We also provide a package to test the results. 
 Lastly, we provide a package which can be used to obtain joint prediction region from quantile regression estimates.
+
+See the test file to see how the packages can be used. 
+
+Tensorflow version 2.8.0
+PyTorch version 1.11.0
