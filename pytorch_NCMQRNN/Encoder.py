@@ -43,11 +43,14 @@ class Encoder(nn.Module):
         batch_size = input.shape[1]
         input_size = input.shape[2]
         layer_size = self.layer_size
+
         direction_size =1
         if self.by_direction:
             direction_size = 2
+
         outputs,_ = self.LSTM(input)
         outputs_reshape = outputs.view(seq_len,batch_size,direction_size,self.hidden_size)
         outputs_last_layer = outputs_reshape[:,:,-1,:]
         final_outputs = outputs_last_layer.view(seq_len,batch_size,self.hidden_size)
+
         return final_outputs

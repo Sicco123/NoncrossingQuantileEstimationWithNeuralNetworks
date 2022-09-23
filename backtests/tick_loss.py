@@ -14,7 +14,7 @@ def quantile_risk(forecast, labels, quantiles):
     output_y_tiled = np.tile(labels, [quantile_length])
 
     ### prepare predicted values
-    predicted_y_tiled = np.reshape(forecast.T, [-1])
+    predicted_y_tiled = np.reshape(forecast, [-1]).T
 
     ### objective function
     diff_y = output_y_tiled - predicted_y_tiled

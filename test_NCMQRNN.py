@@ -35,12 +35,12 @@ target_df = prepared_data[0]
 covariate_df = prepared_data[1]
 train_target_df = prepared_data[2]
 train_covariate_df = prepared_data[3]
-val_target_df = prepared_data[4]
-val_covariate_df = prepared_data[5]
+train_val_target_df = prepared_data[4]
+train_val_covariate_df = prepared_data[5]
 
 dset = NCMQRNN_dataset(train_target_df,train_covariate_df,horizon_size )
 train_dataset = NCMQRNN_dataset(train_target_df,train_covariate_df,horizon_size)
-val_data = NCMQRNN_dataset(val_target_df, val_covariate_df, horizon_size)
+train_val_data = NCMQRNN_dataset(train_val_target_df, train_val_covariate_df, horizon_size)
 
 covariate_size = train_covariate_df.shape[1]
 
@@ -48,7 +48,7 @@ covariate_size = train_covariate_df.shape[1]
 net = NCMQRNN(horizon_size, hidden_size, 1 - tau_vec, columns, dropout, layer_size, by_direction, lr, batch_size, num_epochs, context_size, covariate_size, p1, save_nn_name, device)
 
 ### Train Model
-net.train(train_dataset, val_data)
+net.train(train_dataset, train_val_data)
 
 ### Get Quantiles
 col_name = 1
